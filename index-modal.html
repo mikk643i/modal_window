@@ -110,7 +110,16 @@
         }
 
         function visModal() {
-            document.querySelector("#modal").classList.add("vis");
+
+            let modal = document.querySelector("#modal");
+            modal.classList.add("vis");
+            modal.querySelector("button").addEventListener("click", skjulModal);
+
+
+        }
+
+        function skjulModal() {
+            modal.classList.remove("vis");
         }
     </script>
 </body>
