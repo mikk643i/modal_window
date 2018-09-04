@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hent JSON</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(240, 240, 240);
+        }
+
+        article {
+            padding: 1em;
+            background-color: white;
+        }
+
+        .data-container article img {
+            width: 100%;
+        }
+
+        .data-container {
+            margin: 0 auto;
+            display: grid;
+        }
+
+        @media screen and (min-width:580px) {
+            .data-container {
+                padding-left: 10%;
+                padding-right: 10%;
+                grid-gap: 5px;
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        #modal {
+            background-color: rgba(0, 0, 0, .7);
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            text-align: center;
+            display: none;
+
+        }
+
+        #modal-content {
+            background-color: rgba(250, 250, 250, 1);
+            height: 70vh;
+            width: 70vw;
+            margin: auto;
+        }
+
+        #modal.vis {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="modal">
+        <button>Close</button>
+        <div id="modal-content">
+            <h2 class="modal-navn"></h2>
+            <img class="modal-billeder" src="" alt="">
+        </div>
+    </section>
+    <main class="container">
+        <section class="data-container"></section>
+    </main>
+    <template class="data-template">
+      <article class="person">
+          <h2></h2>
+          <img src="" alt=""><br>
+          mail: <a class="data-mail" href=""></a><br>
+          github: <span class="data-github"></span><br>
+          tlf: <span class="data-tlf"></span><br>
+      </article>
+   </template>
+
+    <script>
+        let personer;
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        async function hentJson() {
+            let myJson = await fetch("personliste.json");
+            personer = await myJson.json();
+            visPersoner();
+        }
+
+        function visPersoner() {
+            let dest = document.querySelector(".data-container"),
+                temp = document.querySelector(".data-template");
+            //løb personlisten igennem og lav en klon
+            personer.forEach(person => {
+                let klon = temp.cloneNode(true).content;
+                //indsæt data i klonen
+                klon.querySelector("h2").textContent = person.navn;
+                klon.querySelector("img").src = person.billede;
+                klon.querySelector("img").addEventListener("click", () => {
+                    visModal();
+                });
+                klon.querySelector(".data-github").textContent = person.github;
+                klon.querySelector(".data-tlf").textContent = person.tlf;
+                klon.querySelector(".data-mail").textContent = person.mail;
+                klon.querySelector(".data-mail").href = "mailto:" + person.mail;
+
+                //placer klon i DOM
+                dest.appendChild(klon);
+            })
+        }
+
+        function visModal() {
+            document.querySelector("#modal").classList.add("vis");
+        }
+    </script>
+</body>
+
+</html>
