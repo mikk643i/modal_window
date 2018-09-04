@@ -31,7 +31,6 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
     </style>
 </head>
 
@@ -40,19 +39,20 @@
         <section class="data-container"></section>
     </main>
     <template class="data-template">
-      <article class="person">
-          <h2></h2>
-          <img src="" alt=""><br>
-          mail: <a class="data-mail" href=""></a><br>
-          github: <span class="data-github"></span><br>
-          tlf: <span class="data-tlf"></span><br>
-      </article>
-   </template>
+        <article class="person">
+            <h2></h2>
+            <br> mail:
+            <a class="data-mail" href=""></a>
+            <br> github: <span class="data-github"></span>
+            <br> tlf: <span class="data-tlf"></span>
+            <br>
+            <img src="" alt="">
+        </article>
+    </template>
 
     <script>
         let personer;
         document.addEventListener("DOMContentLoaded", hentJson);
-
         async function hentJson() {
             let myJson = await fetch("personliste.json");
             personer = await myJson.json();
@@ -64,12 +64,14 @@
                 temp = document.querySelector(".data-template");
             //løb personlisten igennem og lav en klon
             personer.forEach(person => {
+                console.log(i);
+                person.id = i;
                 let klon = temp.cloneNode(true).content;
                 //indsæt data i klonen
                 klon.querySelector("h2").textContent = person.navn;
                 klon.querySelector("img").src = person.billede;
                 klon.querySelector("img").addEventListener("click", () => {
-                    window.location.href = "single.html";
+                    window.location.href = "single.html?id=" + i;
                 });
                 klon.querySelector(".data-github").textContent = person.github;
                 klon.querySelector(".data-tlf").textContent = person.tlf;
@@ -79,7 +81,6 @@
                 dest.appendChild(klon);
             })
         }
-
     </script>
 </body>
 

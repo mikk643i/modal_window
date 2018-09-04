@@ -37,41 +37,42 @@
 <body>
     <main class="container">
         <section class="data-container">
-
             <article class="person">
-                <h2></h2>
-                <img src="" alt=""><br> mail: <a class="data-mail" href=""></a><br> github: <span class="data-github"></span><br> tlf: <span class="data-tlf"></span><br>
+                <h2>HHJHG</h2>
+                <br> mail:
+                <a class="data-mail" href=""></a>
+                <br> github: <span class="data-github"></span>
+                <br> tlf: <span class="data-tlf"></span>
+                <br>
+                <img src="" alt="">
             </article>
         </section>
     </main>
 
-
     <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let github = urlParams.get("github");
+        console.log(github);
         let personer;
         document.addEventListener("DOMContentLoaded", hentJson);
-
         async function hentJson() {
             let myJson = await fetch("personliste.json");
             personer = await myJson.json();
-            visPersoner();
+            visPerson();
         }
-
-        function visPersoner() {
-            let dest = document.querySelector(".data-container"),
-                temp = document.querySelector(".data-template");
+        function visPerson() {
+            let dest = document.querySelector(".data-container");
             //løb personlisten igennem og lav en klon
             personer.forEach(person => {
-                let klon = temp.cloneNode(true).content;
-                //indsæt data i klonen
-                klon.querySelector("h2").textContent = person.navn;
-                klon.querySelector("img").src = person.billede;
-                klon.querySelector(".data-github").textContent = person.github;
-                klon.querySelector(".data-tlf").textContent = person.tlf;
-                klon.querySelector(".data-mail").textContent = person.mail;
-                klon.querySelector(".data-mail").href = "mailto:" + person.mail;
-                //placer klon i DOM
-                dest.appendChild(klon);
-            })
+                if (person.github == github) {
+                    dest.querySelector("h2").textContent = person.navn;
+                    dest.querySelector("img").src = person.billede;
+                    dest.querySelector(".data-github").textContent = person.github;
+                    dest.querySelector(".data-tlf").textContent = person.tlf;
+                    dest.querySelector(".data-mail").textContent = person.mail;
+                    dest.querySelector(".data-mail").href = "mailto:" + person.mail;
+                }
+            });
         }
     </script>
 </body>
