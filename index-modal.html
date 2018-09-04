@@ -39,8 +39,9 @@
             height: 100vh;
             position: fixed;
             text-align: center;
-            display: none;
-
+            opacity: 0;
+            pointer-events: none;
+            transition: 1s
         }
 
         #modal-content {
@@ -51,7 +52,14 @@
         }
 
         #modal.vis {
-            display: block;
+            opacity: 1;
+            pointer-events: all;
+            transition: 0.5s;
+        }
+
+        #modal img {
+            height: 25vw;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -61,7 +69,7 @@
         <button>Close</button>
         <div id="modal-content">
             <h2 class="modal-navn"></h2>
-            <img class="modal-billeder" src="" alt="">
+            <img class="modal-billede" src="" alt="">
         </div>
     </section>
     <main class="container">
@@ -97,7 +105,7 @@
                 klon.querySelector("h2").textContent = person.navn;
                 klon.querySelector("img").src = person.billede;
                 klon.querySelector("img").addEventListener("click", () => {
-                    visModal();
+                    visModal(person);
                 });
                 klon.querySelector(".data-github").textContent = person.github;
                 klon.querySelector(".data-tlf").textContent = person.tlf;
@@ -109,17 +117,24 @@
             })
         }
 
-        function visModal() {
+        function visModal(personen) {
 
             let modal = document.querySelector("#modal");
             modal.classList.add("vis");
+            modal.querySelector(".modal-navn").textContent = personen.navn;
+            modal.querySelector(".modal-billede").src = personen.billede;
+            modal.querySelector(".modal-billede").alt = "foto af" + personen.navn;
             modal.querySelector("button").addEventListener("click", skjulModal);
+
 
 
         }
 
         function skjulModal() {
+
             modal.classList.remove("vis");
+
+
         }
     </script>
 </body>
